@@ -1,10 +1,22 @@
 @ruby_version = ask("ruby version?(Ex. 2.1.5)")
+@app_name = ask("application name?")#もう一回うたないといけないのがイケてない
 # @database_user = ask("database user?")
 
 # clean file
 # ----------------------------------------------------------------
 run 'rm README.rdoc'
 run 'touch README.md'
+
+run 'mv app/assets/stylesheets/application.css app/assets/stylesheets/application.scss'
+append_file 'app/assets/stylesheets/application.scss', <<-END
+@import 'bootstrap-sprockets';
+@import 'bootstrap';
+END
+
+append_file 'app/assets/javascripts/application.js', <<-END
+//= require bootstrap-sprockets
+END
+
 
 append_file '.gitignore', <<-END
 #rubymine
@@ -88,16 +100,30 @@ end
 
 # run "bundle install" #自動で実施されるぽい
 
+run 'html2haml -e app/views/layouts/application.html.erb app/views/layouts/application.html.haml'
+run 'rm app/views/layouts/application.html.erb'
+
+run 'createdb #{@app_name}_development'
+run 'createdb #{@app_name}_test'
+
+
+
 #database.yml
 # gsub_file 'config/database.yml', /#username: /, ''
 
 # Generators
 # ----------------------------------------------------------------
 generate 'simple_form:install --bootstrap'
+generate 'rspec:install'
 
 #devise
 generate 'devise:install'
 run 'rails generate devise user'
+run 'rails generate devise:views'
+#erbで生成されるため、haml化
+run 'for file in app/views/devise/**/*.erb; do html2haml -e $file ${file%erb}haml && rm $file; done'
+
+run 'guard init rspec'
 
 # set config/application.rb
 application  do
@@ -121,3 +147,6 @@ run 'wget https://raw.github.com/svenfuchs/rails-i18n/master/rails/locale/ja.yml
 git :init
 git add: "."
 git commit: %Q{ -m 'Initial commit' }
+
+#
+rake 'db:migrate'
