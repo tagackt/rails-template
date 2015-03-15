@@ -103,9 +103,8 @@ end
 run 'html2haml -e app/views/layouts/application.html.erb app/views/layouts/application.html.haml'
 run 'rm app/views/layouts/application.html.erb'
 
-run 'createdb #{@app_name}_development'
-run 'createdb #{@app_name}_test'
-
+run "createdb #{@app_name}_development"
+run "createdb #{@app_name}_test"
 
 
 #database.yml
