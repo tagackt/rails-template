@@ -7,10 +7,13 @@
 run 'rm README.rdoc'
 run 'touch README.md'
 
-run 'mv app/assets/stylesheets/application.css app/assets/stylesheets/application.scss'
-append_file 'app/assets/stylesheets/application.scss', <<-END
-@import 'bootstrap-sprockets';
-@import 'bootstrap';
+run 'mv app/assets/stylesheets/application.css app/assets/stylesheets/application.sass'
+append_file 'app/assets/stylesheets/application.sass', <<-END
+/*
+ *= require font-awesome
+ */
+@import 'bootstrap-sprockets'
+@import 'bootstrap'
 END
 
 append_file 'app/assets/javascripts/application.js', <<-END
