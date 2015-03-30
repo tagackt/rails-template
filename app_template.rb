@@ -6,6 +6,7 @@
 # ----------------------------------------------------------------
 run 'rm README.rdoc'
 run 'touch README.md'
+run 'touch .env'
 
 run 'mv app/assets/stylesheets/application.css app/assets/stylesheets/application.sass'
 append_file 'app/assets/stylesheets/application.sass', <<-END
@@ -137,6 +138,8 @@ application  do
     I18n.enforce_available_locales = true
     # config.i18n.load_path += Dir[Rails.root.join('config', 'locales', '**', '*.{rb,yml}').to_s]
     config.i18n.default_locale = :ja
+    # generateのcssファイルはsassを生成
+    config.sass.preferred_syntax = :sass
   }
 end
 
